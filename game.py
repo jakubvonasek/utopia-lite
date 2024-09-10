@@ -5,6 +5,9 @@ import pygame
 resolution = (640, 480)
 fps = 60
 
+from src.utils import load_image
+from src.entities import PhysicsEntity
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -14,12 +17,13 @@ class Game:
 
         self.clock = pygame.time.Clock()
 
-        self.base_player_image = pygame.image.load('./data/images/player/player_right.png').convert_alpha()
-        self.img = self.base_player_image
-        self.img_pos = [160,260]
         self.movement = [False,False]
         
-        self.img.set_colorkey((0,0,0))
+        self.assets = {
+            'player': load_image('entities/player/player.png')
+        }
+
+        self.player = PhysicsEntity(self, 'player', (50,50), (32,32))
 
     def color_enemy(self):
         enemy_image = self.base_enemy_image.copy()
@@ -32,22 +36,24 @@ class Game:
 
         while True:
             self.window.fill((14, 219, 248))
-            self.img_pos[1] += (self.movement[1] - self.movement[0]) * 5
-            self.window.blit(self.img, self.img_pos)
+
+            self.player.update((self.movement[1] - self.movement[0],0))
+            self.player.render(self.window)
+
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_UP:
+                    if event.key == pygame.K_LEFT:
                         self.movement[0] = True
-                    if event.key == pygame.K_DOWN:
+                    if event.key == pygame.K_RIGHT:
                         self.movement[1] = True
                 if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_UP:
+                    if event.key == pygame.K_LEFT:
                         self.movement[0] = False
-                    if event.key == pygame.K_DOWN:
+                    if event.key == pygame.K_RIGHT:
                         self.movement[1] = False
 
             pygame.display.update()
