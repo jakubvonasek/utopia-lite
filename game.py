@@ -14,6 +14,7 @@ class Game:
 
         pygame.display.set_caption("UtopiaLite!")
         self.window = pygame.display.set_mode(resolution)
+        self.surface = pygame.Surface((320, 240))
 
         self.clock = pygame.time.Clock()
 
@@ -35,10 +36,10 @@ class Game:
     def run(self):
 
         while True:
-            self.window.fill((14, 219, 248))
+            self.surface.fill((14, 219, 248))
 
             self.player.update((self.movement[1] - self.movement[0],0))
-            self.player.render(self.window)
+            self.player.render(self.surface)
 
 
             for event in pygame.event.get():
@@ -56,8 +57,11 @@ class Game:
                     if event.key == pygame.K_RIGHT:
                         self.movement[1] = False
 
+
+            self.window.blit(pygame.transform.scale(self.surface,self.window.get_size()))
             pygame.display.update()
             self.clock.tick(fps)
+
 
 game = Game()
 game.run()
