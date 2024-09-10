@@ -14,21 +14,24 @@ class Game:
 
         self.clock = pygame.time.Clock()
 
+        self.base_player_image = pygame.image.load('./data/images/player/player_right.png').convert_alpha()
+        self.img = self.base_player_image
         self.img_pos = [160,260]
         self.movement = [False,False]
-        self.base_player_image = pygame.image.load('./data/images/player/player-1.png').convert_alpha()
-
-    def generate_player(self):
-        player_image = self.base_player_image.copy()
-        random_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-        player_image.fill(random_color + (0,), special_flags=pygame.BLEND_RGBA_ADD)
         
-        return player_image
+        self.img.set_colorkey((0,0,0))
+
+    def color_enemy(self):
+        enemy_image = self.base_enemy_image.copy()
+        random_color = (random.randint(0, 100), random.randint(0, 100), random.randint(0, 100))
+        enemy_image.fill(random_color + (0,), special_flags=pygame.BLEND_RGBA_ADD)
+        
+        return enemy_image
 
     def run(self):
-        self.img = self.generate_player()
 
         while True:
+            self.window.fill((14, 219, 248))
             self.img_pos[1] += (self.movement[1] - self.movement[0]) * 5
             self.window.blit(self.img, self.img_pos)
 
