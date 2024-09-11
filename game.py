@@ -6,7 +6,10 @@ resolution = (640, 480)
 fps = 60
 
 from src.utils import load_image
+from src.utils import load_images
 from src.entities import PhysicsEntity
+from src.tilemap import Tilemap
+
 
 class Game:
     def __init__(self):
@@ -21,22 +24,25 @@ class Game:
         self.movement = [False,False]
         
         self.assets = {
+            # 'decor' : load_images('tiles/decor'),
+            'grass' : load_images('tiles/grass'),
+            # 'large_decor' : load_images('tiles/large_decor'),
+            'stone' : load_images('tiles/stone'),
             'player': load_image('entities/player/player.png')
         }
 
+        print(self.assets)
+
         self.player = PhysicsEntity(self, 'player', (50,50), (32,32))
 
-    def color_enemy(self):
-        enemy_image = self.base_enemy_image.copy()
-        random_color = (random.randint(0, 100), random.randint(0, 100), random.randint(0, 100))
-        enemy_image.fill(random_color + (0,), special_flags=pygame.BLEND_RGBA_ADD)
-        
-        return enemy_image
+        self.tilemap = Tilemap(self, tilesize=16)
 
     def run(self):
 
         while True:
             self.surface.fill((14, 219, 248))
+
+            self.tilemap.render(self.surface)
 
             self.player.update((self.movement[1] - self.movement[0],0))
             self.player.render(self.surface)
